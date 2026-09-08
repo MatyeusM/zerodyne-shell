@@ -1,0 +1,132 @@
+[tools]
+# Go toolchain for zerodyne daemon (pin to 1.27 to match system; bump as needed)
+go = "1.27"
+# Used by `mise watch` — installed automatically on first `mise watch`/`mise run dev:watch`
+watchexec = "latest"
+
+[env]
+# Prefer Qt6 QML tooling (qmlformat, qmllint, qmlls, etc.) on Arch:
+# - /usr/bin/qmlformat is Qt5, /usr/lib/qt6/bin/qmlformat is Qt6
+# Prepending qt6 bin ensures `qmlformat --version` reports 6.x inside `mise exec`.
+_.path = ["/usr/lib/qt6/bin", "{{env.PATH}}"]
+QT_SELECT = "6"
+# Helpful for any Qt6 CMake/qmake lookups
+QT_VERSION = "6"
+
+[tasks.build]
+description = "Compile zerodyne Go daemon to bin/zerodyne"
+# Build from zerodyne module dir so no root go.mod is required
+run = "mkdir -p bin && go -C zerodyne build -o ../bin/zerodyne ./cmd/zerodyne"
+sources = ["zerodyne/**/*.go", "zerodyne/go.mod", "zerodyne/go.sum"]
+outputs = ["bin/zerodyne"]
+
+[tasks.dev]
+description = "Build and run quickshell (single-shot). Use `mise watch -r dev` for live reload with daemon culling."
+depends = ["build"]
+run = """
+set -euo pipefail
+
+cull_daemon() {
+  # Kill via pidfile first (avoids pkill self-match)
+  pidfile="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zerodyne/zerodyne.pid"
+  if [ -f "$pidfile" ]; then
+    pid=$(cat "$pidfile" 2>/dev/null || true)
+    if [ -n "${pid:-}" ]; then
+      kill "$pid" 2>/dev/null || true
+      # wait briefly for graceful exit
+      for _ in 1 2 3; do kill -0 "$pid" 2>/dev/null || break; sleep 0.1; done
+      kill -9 "$pid" 2>/dev/null || true
+    fi
+  fi
+  # Fallback: pkill by exact name (avoids matching this shell's 'sh -c' line)
+  pkill -x zerodyne 2>/dev/null || true
+  # Also bracket trick for patterns that would self-match
+  pkill -f "[b]in/zerodyne" 2>/dev/null || true
+}
+
+# --- Cull stale lazy daemon + previous quickshell instance for this path ---
+echo "==> Culling old zerodyne daemon and quickshell (path=.)..."
+cull_daemon
+sleep 0.2
+# Gracefully kill previous quickshell instance for this config path
+if command -v qs >/dev/null 2>&1; then
+  qs kill -p . 2>/dev/null || true
+fi
+sleep 0.2
+
+# Ensure cleanup on SIGTERM/SIGINT (critical for `mise watch --restart`)
+cleanup() {
+  echo "==> dev: cleaning up..."
+  # Kill child quickshell if still running
+  if [ -n "${QS_PID:-}" ]; then
+    kill "$QS_PID" 2>/dev/null || true
+    wait "$QS_PID" 2>/dev/null || true
+  fi
+  cull_daemon
+  if command -v qs >/dev/null 2>&1; then
+    qs kill -p . 2>/dev/null || true
+  fi
+}
+trap cleanup INT TERM
+
+echo "==> Starting quickshell: qs -p . (foreground, Ctrl-C to stop)"
+# Run qs as child so shell can trap SIGTERM from `mise watch --restart` and cull daemon
+qs -p . &
+QS_PID=$!
+# Wait for qs to exit; propagate its exit code but handle headless CI gracefully
+wait "$QS_PID" || qs_status=$?
+qs_status=${qs_status:-0}
+# On normal exit (not signal), still cull daemon then exit with qs status
+trap - INT TERM
+cleanup
+if [ "${qs_status}" -ne 0 ]; then
+  # 143 = SIGTERM (128+15), 130 = SIGINT (128+2) — expected on `mise watch --restart` or Ctrl-C
+  if [ "$qs_status" -eq 143 ] || [ "$qs_status" -eq 130 ]; then
+    echo "qs terminated by signal $qs_status (watch restart / Ctrl-C) — exit 0"
+    exit 0
+  fi
+  if [ -z "${WAYLAND_DISPLAY:-}" ] && [ -z "${DISPLAY:-}" ]; then
+    echo "qs exited $qs_status headless (no WAYLAND_DISPLAY/DISPLAY) — exit 0 to keep watch alive"
+    exit 0
+  fi
+  echo "qs exited with $qs_status"
+fi
+exit "$qs_status"
+"""
+
+[tasks."dev:watch"]
+description = "Watch Go + QML, rebuild and restart quickshell (culls daemon). Alias for `mise watch --restart dev`."
+run = "mise watch --restart dev"
+
+[tasks.watch]
+description = "Alias for dev:watch"
+run = "mise watch --restart dev"
+
+[tasks.fmt]
+description = "Format QML with Qt6 qmlformat (uses mise Qt6 PATH)"
+run = "qmlformat -i shell.qml 2>/dev/null; find modules services common -name '*.qml' -exec qmlformat -i {} \\; 2>/dev/null; echo \"qmlformat done (Qt6: $(qmlformat --version))\""
+
+[tasks.fmt-check]
+description = "Check QML formatting (Qt6 qmlformat)"
+run = """
+set -e
+failed=0
+for f in $(find . -name '*.qml' -not -path './.git/*' -not -path './zerodyne/*' -not -path './bin/*' 2>/dev/null); do
+  if ! qmlformat --verbose \"$f\" | diff -u \"$f\" - >/dev/null 2>&1; then
+    echo \"needs format: $f\"
+    failed=1
+  fi
+done
+if [ $failed -ne 0 ]; then echo \"fmt-check failed\"; exit 1; fi
+echo \"fmt-check ok (Qt6: $(qmlformat --version))\"
+"""
+
+[tasks.clean]
+description = "Remove build artifacts and stale daemon state"
+run = """
+rm -f bin/zerodyne
+rm -f \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zerodyne/zerodyne.sock\"
+rm -f \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zerodyne/zerodyne.pid\"
+rm -f ~/.local/state/zerodyne/zerodyne.sock ~/.local/state/zerodyne/zerodyne.pid 2>/dev/null || true
+echo \"cleaned\"
+"""
