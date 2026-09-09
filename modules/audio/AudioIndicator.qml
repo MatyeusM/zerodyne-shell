@@ -81,27 +81,15 @@ Item {
     root.runExec("audio-input-mute", [(delta > 0 ? "+" : "") + delta])
   }
 
-  // Intrinsic width tracks the percent label; icons are fixed size. The
-  // bluetooth badge overlaps the device icon (-Spacing.xxs), so the outer
-  // gaps use Spacing.xs and the badge steals back xxs when visible.
-  // (TextMetrics stays above implicitWidth on purpose: the hot-reload rule
-  // forbids bindings to later siblings, and qmlformat's property-first
-  // order would break that here.)
-  TextMetrics {
-    id: pctMeasure
-
-    text: root.percentText()
-    font: Typography.mono({
-                            "size": Typography.sm
-                          })
-  }
-
-  implicitWidth: root.rowLeft + pctMeasure.width + root.iconSize * (root.sinkBt ? 3 : 2)
-                 + Spacing.xs * 2 - (root.sinkBt ? Spacing.xxs : 0) + root.rowRight
+  implicitWidth: Sizing.barIndicatorWidth
   implicitHeight: Spacing.lg
 
   Component.onCompleted: root.refresh()
 
+  // Fixed width shared with ConnectivityIndicator (Sizing.barIndicatorWidth)
+  // so both clock arms match. The percent Text takes its natural width so
+  // the group breathes when digits come and go, and the group centers
+  // between fill spacers so it always reads as centered.
   Timer {
     interval: 5000
     running: true
@@ -196,39 +184,50 @@ Item {
       anchors.fill: parent
       anchors.leftMargin: root.rowLeft
       anchors.rightMargin: root.rowRight
-      spacing: Spacing.xs
+      spacing: 0
 
-      Text {
-        Layout.alignment: Qt.AlignVCenter
-        text: root.percentText()
-        color: root.outMuted ? Color.muted : outHover.current
-        font: Typography.mono({
-                                "size": Typography.sm
-                              })
+      Item {
+        Layout.fillWidth: true
       }
-      // Device icon plus badge as one visual unit: the badge tucks into
-      // its icon with a negative gap so the pair reads as one glyph.
-      Row {
+      RowLayout {
         Layout.alignment: Qt.AlignVCenter
-        spacing: -Spacing.xxs
+        spacing: Spacing.xs
 
-        Icon {
-          glyph: root.deviceGlyph()
-          size: root.iconSize
+        Text {
+          Layout.alignment: Qt.AlignVCenter
+          text: root.percentText()
           color: root.outMuted ? Color.muted : outHover.current
+          font: Typography.mono({
+                                  "size": Typography.sm
+                                })
+        }
+        // Device icon plus badge as one visual unit: the badge tucks into
+        // its icon with a negative gap so the pair reads as one glyph.
+        Row {
+          Layout.alignment: Qt.AlignVCenter
+          spacing: -Spacing.xxs
+
+          Icon {
+            glyph: root.deviceGlyph()
+            size: root.iconSize
+            color: root.outMuted ? Color.muted : outHover.current
+          }
+          Icon {
+            visible: root.sinkBt
+            glyph: Zerodyne.glyphBluetooth
+            size: root.iconSize
+            color: root.outMuted ? Color.muted : outHover.current
+          }
         }
         Icon {
-          visible: root.sinkBt
-          glyph: Zerodyne.glyphBluetooth
+          Layout.alignment: Qt.AlignVCenter
+          glyph: Zerodyne.audioSourceGlyph(root.inputMuted)
           size: root.iconSize
-          color: root.outMuted ? Color.muted : outHover.current
+          color: !root.sourcePresent || root.inputMuted ? Color.muted : micHover.current
         }
       }
-      Icon {
-        Layout.alignment: Qt.AlignVCenter
-        glyph: Zerodyne.audioSourceGlyph(root.inputMuted)
-        size: root.iconSize
-        color: !root.sourcePresent || root.inputMuted ? Color.muted : micHover.current
+      Item {
+        Layout.fillWidth: true
       }
     }
   }

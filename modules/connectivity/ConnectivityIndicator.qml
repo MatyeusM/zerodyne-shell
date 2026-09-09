@@ -60,7 +60,10 @@ Item {
     execProc.running = true
   }
 
-  implicitWidth: root.btZone + Spacing.xs + root.iconSize + root.rowRight
+  // Fixed width shared with AudioIndicator (Sizing.barIndicatorWidth) so
+  // both clock arms match; the narrower glyph pair centers between fill
+  // spacers instead of hugging one edge.
+  implicitWidth: Sizing.barIndicatorWidth
   implicitHeight: Spacing.lg
 
   Component.onCompleted: root.refresh()
@@ -145,19 +148,30 @@ Item {
       anchors.fill: parent
       anchors.leftMargin: root.rowLeft
       anchors.rightMargin: root.rowRight
-      spacing: Spacing.xs
+      spacing: 0
 
-      Icon {
-        Layout.alignment: Qt.AlignVCenter
-        glyph: root.btGlyph()
-        size: root.iconSize
-        color: root.btPowered ? btHover.current : Color.muted
+      Item {
+        Layout.fillWidth: true
       }
-      Icon {
+      RowLayout {
         Layout.alignment: Qt.AlignVCenter
-        glyph: root.glyph()
-        size: root.iconSize
-        color: root.connected ? wifiHover.current : Color.muted
+        spacing: Spacing.md
+
+        Icon {
+          Layout.alignment: Qt.AlignVCenter
+          glyph: root.btGlyph()
+          size: root.iconSize
+          color: root.btPowered ? btHover.current : Color.muted
+        }
+        Icon {
+          Layout.alignment: Qt.AlignVCenter
+          glyph: root.glyph()
+          size: root.iconSize
+          color: root.connected ? wifiHover.current : Color.muted
+        }
+      }
+      Item {
+        Layout.fillWidth: true
       }
     }
   }

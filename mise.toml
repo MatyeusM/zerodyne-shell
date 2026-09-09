@@ -130,3 +130,22 @@ rm -f \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zerodyne/zerodyne.pid\"
 rm -f ~/.local/state/zerodyne/zerodyne.sock ~/.local/state/zerodyne/zerodyne.pid 2>/dev/null || true
 echo \"cleaned\"
 """
+
+[tasks.install]
+description = "Build and install shell to ~/.config/quickshell (default config: autostart + bare `qs ipc` work)"
+depends = ["build"]
+run = """
+set -euo pipefail
+dest=\"$HOME/.config/quickshell\"
+mkdir -p \"$dest\"
+# Explicit allowlist: only what the shell needs at runtime (including
+# bin/zerodyne and the fonts in assets/, both resolved relative to the
+# shell dir). README.md doesn't exist yet; --ignore-missing-args picks
+# it up automatically once created. --delete also prunes anything at
+# the destination that isn't on this list.
+rsync -a --delete --ignore-missing-args \\
+  shell.qml bin components modules services style ui utility assets LICENSE README.md \\
+  \"$dest\"/
+echo \"installed to $dest\"
+echo \"next: autostart with 'exec-once = qs', then 'qs ipc call launcher toggle'\"
+"""
