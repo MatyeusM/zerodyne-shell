@@ -10,15 +10,48 @@ import qs.ui
 // Rofi replacement: centered dialog with an autofocused search field and
 // fuzzy results carrying icons plus comment subtitles. Keyboard (type,
 // Up/Down, Enter, Esc) and mouse (hover-select, click-launch) both work.
-// No bar button: opens via IPC from a Hyprland keybind, on the bar's
-// screen. Launching runs entry.execute(); the window closes on launch,
-// Escape, or scrim click.
+// No bar button: opens via IPC from a Hyprland keybind, on the focused
+// monitor's screen (shell.activeScreen). Launching runs entry.execute();
+// the window closes on launch, Escape, or scrim click.
 PanelWindow {
   id: root
 
   property var dialogScreen: null
   property bool open: false
   readonly property real iconSize: Typography.xl
+  // Movement-gated hover-select: typing rebuilds the list under a static
+  // cursor, and the fresh delegate's hovered would otherwise steal the
+  // keyboard selection. Only the scrim feed arms it: the scrim is
+  // fullscreen, static, and never rebuilt, so its position events mean
+  // real pointer travel, while delegate creation/rebuild motion under a
+  // static cursor is ignored. Typing, opening, or an external model
+  // refresh disarms and re-anchors; crossing hoverThreshold arms again.
+  property bool hoverArmed: false
+  property real hoverAnchorX: -1
+  property real hoverAnchorY: -1
+  property real lastMouseX: -1
+  property real lastMouseY: -1
+  readonly property real hoverThreshold: Spacing.xs
+
+  function noteMouseMove(px, py) {
+    root.lastMouseX = px
+    root.lastMouseY = py
+    if (root.hoverAnchorX < -0.5) {
+      root.hoverAnchorX = px
+      root.hoverAnchorY = py
+      return
+    }
+    var dx = px - root.hoverAnchorX
+    var dy = py - root.hoverAnchorY
+    if (dx * dx + dy * dy > root.hoverThreshold * root.hoverThreshold) {
+      root.hoverArmed = true
+    }
+  }
+  function disarmHover() {
+    root.hoverArmed = false
+    root.hoverAnchorX = root.lastMouseX
+    root.hoverAnchorY = root.lastMouseY
+  }
 
   visible: root.open
   anchors.top: true
@@ -35,6 +68,7 @@ PanelWindow {
     if (root.open) {
       field.text = ""
       launcher.refresh()
+      root.disarmHover()
       Qt.callLater(function () {
         field.forceFocus()
       })
@@ -44,10 +78,24 @@ PanelWindow {
   Launcher {
     id: launcher
   }
+  Connections {
+    function onResultsChanged() {
+      root.disarmHover()
+    }
+
+    target: launcher
+  }
   Clickable {
+    id: scrimClick
+
     anchors.fill: parent
 
     onClicked: root.open = false
+    // Sole arming source (see above): this sensor never rebuilds or moves.
+    onPositionChanged: mouse => {
+      var p = scrimClick.mapToItem(scrimClick.parent, mouse.x, mouse.y)
+      root.noteMouseMove(p.x, p.y)
+    }
   }
   Panel {
     id: dialog
@@ -69,10 +117,17 @@ PanelWindow {
     Keys.onUpPressed: launcher.move(-1)
     Keys.onDownPressed: launcher.move(1)
 
+    // Fixed list budget: the field plus a full page of maxResults rows, so
+    // the dialog size never changes as the filter narrows (fewer rows
+    // just leave empty space at the bottom; rows never shift for layout
+    // reasons, only list content changes). Own child (field) + earlier
+    // sibling (launcher) refs: safe declare-before-use targets.
     Column {
       anchors.left: parent.left
       anchors.right: parent.right
       spacing: Spacing.xs
+      height: field.implicitHeight + Spacing.xs + launcher.maxResults * Spacing.xl + (launcher.maxResults
+                                                                                      - 1) * Spacing.xs
 
       TextField {
         id: field
@@ -80,7 +135,10 @@ PanelWindow {
         width: parent.width
         placeholderText: "Search applications"
 
-        onTextChanged: launcher.query = field.text
+        onTextChanged: {
+          launcher.query = field.text
+          root.disarmHover()
+        }
         onAccepted: {
           launcher.launchSelected()
           root.open = false
@@ -146,8 +204,18 @@ PanelWindow {
 
             anchors.fill: parent
 
+            // Selection only, never arming: delegate creation/rebuild
+            // motion under a static cursor must not arm hover-select
+            // (that was the ~500ms-after-typing steal: the freq-load
+            // refresh rebuilds delegates, and a creation-time position
+            // event armed just before hovered fired).
             onHoveredChanged: {
-              if (rowClick.hovered) {
+              if (rowClick.hovered && root.hoverArmed) {
+                launcher.selected = row.index
+              }
+            }
+            onPositionChanged: {
+              if (root.hoverArmed) {
                 launcher.selected = row.index
               }
             }
@@ -159,7 +227,10 @@ PanelWindow {
           HoverColor {
             id: nameHover
 
-            hovered: rowClick.hovered || launcher.selected === row.index
+            // Selection is the only indicator: hover feeds selection
+            // (movement-gated above), never highlights directly, so a
+            // static cursor under a rebuilt list shows nothing extra.
+            hovered: launcher.selected === row.index
             normalColor: Color.text
             hoverColor: Color.primary
           }

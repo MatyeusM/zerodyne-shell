@@ -11,6 +11,8 @@ import QtQuick
 // with Pressable, HoverColor, HoverBackground, HoverAppear, or Disabled,
 // bind those primitives to this item's state instead of adding more
 // MouseAreas (overlapping MouseAreas would compete for events).
+// Movement-only observation stays here too (positionChanged): a second
+// MouseArea would fight for hover/click delivery.
 Item {
   // The inherited `enabled` property gates interaction. When composing with
   // Disabled, bind it as `enabled: disabledState.enabled`.
@@ -29,6 +31,10 @@ Item {
   signal clicked(var mouse)
   signal doubleClicked(var mouse)
   signal pressAndHold(var mouse)
+  // Raw pointer movement inside the area. Used for movement-gated hover
+  // (e.g. launcher hover-select arms only after the pointer really moves,
+  // so list rebuilds under a static cursor never steal selection).
+  signal positionChanged(var mouse)
 
   MouseArea {
     id: sensor
@@ -40,6 +46,9 @@ Item {
 
     onClicked: mouse => {
       return root.clicked(mouse)
+    }
+    onPositionChanged: mouse => {
+      return root.positionChanged(mouse)
     }
     onDoubleClicked: mouse => {
       return root.doubleClicked(mouse)

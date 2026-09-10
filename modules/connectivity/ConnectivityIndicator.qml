@@ -37,7 +37,12 @@ Item {
   readonly property real rowLeft: Spacing.sm + Spacing.sm
   readonly property real rowRight: Spacing.sm + Spacing.sm
   readonly property real iconSize: Typography.lg
-  readonly property real btZone: root.rowLeft + root.iconSize
+
+  // Touch cell around each glyph: the icon plus a small pad so the
+  // hover/click surface sits exactly on the rendered icon instead of a
+  // fixed split of the whole indicator (which drifted off the centered
+  // glyphs). Cell pad (xs) + row gap (xs) keeps the original 16px glyph
+  // rhythm. Width is explicit so centerIn below stays loop-free.
 
   function glyph() {
     if (!root.connected)
@@ -92,51 +97,6 @@ Item {
   Process {
     id: execProc
   }
-  Clickable {
-    id: btClick
-
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.left: parent.left
-    width: root.btZone + Spacing.xs / 2
-    acceptedButtons: Qt.LeftButton | Qt.RightButton
-
-    onClicked: mouse => {
-      if (mouse.button === Qt.RightButton) {
-        root.togglePower()
-        return
-      }
-      root.btOpen = !root.btOpen
-      root.operateOpen = false
-    }
-  }
-  Clickable {
-    id: wifiClick
-
-    anchors.top: parent.top
-    anchors.bottom: parent.bottom
-    anchors.left: btClick.right
-    anchors.right: parent.right
-
-    onClicked: {
-      root.operateOpen = !root.operateOpen
-      root.btOpen = false
-    }
-  }
-  HoverColor {
-    id: btHover
-
-    hovered: btClick.hovered
-    normalColor: Color.text
-    hoverColor: Color.secondary
-  }
-  HoverColor {
-    id: wifiHover
-
-    hovered: wifiClick.hovered
-    normalColor: Color.text
-    hoverColor: Color.secondary
-  }
   Container {
     anchors.fill: parent
     background: Color.surface
@@ -153,21 +113,70 @@ Item {
       Item {
         Layout.fillWidth: true
       }
-      RowLayout {
+      Row {
         Layout.alignment: Qt.AlignVCenter
-        spacing: Spacing.md
+        spacing: Spacing.sm
 
-        Icon {
-          Layout.alignment: Qt.AlignVCenter
-          glyph: root.btGlyph()
-          size: root.iconSize
-          color: root.btPowered ? btHover.current : Color.muted
+        Item {
+          width: root.iconSize + Spacing.xs
+          height: root.iconSize + Spacing.xs
+
+          Clickable {
+            id: btClick
+
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+            onClicked: mouse => {
+              if (mouse.button === Qt.RightButton) {
+                root.togglePower()
+                return
+              }
+              root.btOpen = !root.btOpen
+              root.operateOpen = false
+            }
+          }
+          HoverColor {
+            id: btHover
+
+            hovered: btClick.hovered
+            normalColor: Color.text
+            hoverColor: Color.secondary
+          }
+          Icon {
+            anchors.centerIn: parent
+            glyph: root.btGlyph()
+            size: root.iconSize
+            color: root.btPowered ? btHover.current : Color.muted
+          }
         }
-        Icon {
-          Layout.alignment: Qt.AlignVCenter
-          glyph: root.glyph()
-          size: root.iconSize
-          color: root.connected ? wifiHover.current : Color.muted
+        Item {
+          width: root.iconSize + Spacing.xs
+          height: root.iconSize + Spacing.xs
+
+          Clickable {
+            id: wifiClick
+
+            anchors.fill: parent
+
+            onClicked: {
+              root.operateOpen = !root.operateOpen
+              root.btOpen = false
+            }
+          }
+          HoverColor {
+            id: wifiHover
+
+            hovered: wifiClick.hovered
+            normalColor: Color.text
+            hoverColor: Color.secondary
+          }
+          Icon {
+            anchors.centerIn: parent
+            glyph: root.glyph()
+            size: root.iconSize
+            color: root.connected ? wifiHover.current : Color.muted
+          }
         }
       }
       Item {
