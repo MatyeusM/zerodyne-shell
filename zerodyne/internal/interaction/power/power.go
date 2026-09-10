@@ -2,7 +2,7 @@
 // user's rofi power menu (~/.config/rofi/scripts/power-menu.sh): same
 // four commands, minus suspend (no sleep on this shell).
 //
-//	logout   — hyprctl dispatch exit
+//	logout   — hyprctl dispatch 'hl.dsp.exit()' (dispatch takes lua)
 //	lock     — hyprlock
 //	restart  — systemctl reboot
 //	shutdown — systemctl poweroff
@@ -65,7 +65,7 @@ func (h *Handler) Exec(ctx context.Context, args []string) (interaction.Result, 
 	defer cancel()
 	switch args[0] {
 	case "logout":
-		if _, err := h.run(sctx, "hyprctl", "dispatch", "exit"); err != nil {
+		if _, err := h.run(sctx, "hyprctl", "dispatch", "hl.dsp.exit()"); err != nil {
 			return interaction.Result{}, fmt.Errorf("power: %v", err)
 		}
 		return interaction.Result{Message: "logging out"}, nil

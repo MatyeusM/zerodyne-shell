@@ -30,7 +30,7 @@ func TestPowerUsage(t *testing.T) {
 
 func TestPowerCommands(t *testing.T) {
 	cases := map[string]string{
-		"logout":   "hyprctl dispatch exit",
+		"logout":   "hyprctl dispatch hl.dsp.exit()",
 		"lock":     "hyprlock",
 		"restart":  "systemctl reboot",
 		"shutdown": "systemctl poweroff",

@@ -147,5 +147,4 @@ rsync -a --delete --ignore-missing-args \\
   shell.qml bin components modules services style ui utility assets LICENSE README.md \\
   \"$dest\"/
 echo \"installed to $dest\"
-echo \"next: autostart with 'exec-once = qs', then 'qs ipc call launcher toggle'\"
 """

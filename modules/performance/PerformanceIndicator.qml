@@ -48,7 +48,7 @@ Item {
       return Color.tertiary
     if (root.topPct >= 71)
       return Color.secondary
-    return Color.primary
+    return Color.text
   }
   function refresh() {
     if (!perfProc.running)
