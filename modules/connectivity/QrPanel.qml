@@ -102,6 +102,12 @@ PanelWindow {
     padding: Spacing.md
     borderWidth: 2
     borderColor: Color.primary
+    cornerStyle: Container.Chamfered
+    chamferTopLeft: true
+    chamferTopRight: false
+    chamferBottomLeft: false
+    chamferBottomRight: true
+    chamferSize: Spacing.sm
 
     Column {
       spacing: Spacing.sm
