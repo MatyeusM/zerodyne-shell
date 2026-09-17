@@ -1,6 +1,6 @@
 [tools]
 # Go toolchain for zerodyne daemon (pin to 1.27 to match system; bump as needed)
-go = "1.27"
+go = "latest"
 # Used by `mise watch` — installed automatically on first `mise watch`/`mise run dev:watch`
 watchexec = "latest"
 

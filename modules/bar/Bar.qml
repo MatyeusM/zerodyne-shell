@@ -22,6 +22,10 @@ PanelWindow {
 
   // Swap to Color.muted when the design calls for it.
   property color bottomBorderColor: Color.muted
+  // Logical bar screen: home (first screen) unless it shows a
+  // fullscreen app, else the first non-fullscreen screen. Null when every
+  // screen is fullscreen, so the bar hides instead of jumping back onto a
+  // fullscreen monitor and kicking it out of fullscreen.
   readonly property var barScreen: {
     var screens = Quickshell.screens
     if (screens.length === 0)
@@ -32,7 +36,7 @@ PanelWindow {
       if (!root.fullscreenOnScreen(screens[j].name))
         return screens[j]
     }
-    return screens[0]
+    return null
   }
 
   // True when the Hyprland monitor behind the given screen has a
@@ -53,6 +57,11 @@ PanelWindow {
   anchors.right: true
   implicitHeight: Spacing.lg
   color: Color.background
+  // Hidden when every monitor is fullscreen (barScreen null): no free
+  // monitor exists, so unmapping beats covering a fullscreen window.
+  // A null screen is tolerated while hidden (same pattern as
+  // NotificationToasts anchorScreen).
+  visible: root.barScreen !== null
   screen: root.barScreen
 
   // Painted first so module borders sit on top of it where they meet.
