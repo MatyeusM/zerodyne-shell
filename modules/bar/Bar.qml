@@ -9,44 +9,55 @@ import qs.modules.power
 import qs.modules.tray
 import qs.modules.workspace
 import qs.style
-import qs.ui
 
 // Top bar: layout and composition only. Widget logic lives in the sibling
-// modules. Uses the background color token, Spacing.lg rhythm, and a bottom
-// border.
+// modules. Transparent: each module paints its own background, the gaps
+// between them show the desktop.
 //
 // The bar lives on the first screen by default. When the monitor it is on
-// shows a fullscreen app, it moves to the next monitor without one.
+// shows a real-fullscreen app, it moves to the next monitor without one.
+// Maximized windows keep the bar and never trigger a move.
 PanelWindow {
   id: root
 
-  // Swap to Color.muted when the design calls for it.
-  property color bottomBorderColor: Color.muted
   // Logical bar screen: home (first screen) unless it shows a
-  // fullscreen app, else the first non-fullscreen screen. Null when every
-  // screen is fullscreen, so the bar hides instead of jumping back onto a
-  // fullscreen monitor and kicking it out of fullscreen.
+  // real-fullscreen app, else the first non-fullscreen screen. Maximized
+  // windows keep their gaps and the bar, so they never trigger a move.
+  // Null when every screen is fullscreen, so the bar hides instead of
+  // jumping back onto a fullscreen monitor and kicking it out of
+  // fullscreen.
   readonly property var barScreen: {
     var screens = Quickshell.screens
     if (screens.length === 0)
       return null
-    if (!root.fullscreenOnScreen(screens[0].name))
+    if (!root.realFullscreenOnScreen(screens[0].name))
       return screens[0]
     for (var j = 1; j < screens.length; j++) {
-      if (!root.fullscreenOnScreen(screens[j].name))
+      if (!root.realFullscreenOnScreen(screens[j].name))
         return screens[j]
     }
     return null
   }
 
-  // True when the Hyprland monitor behind the given screen has a
-  // fullscreen app on its active workspace.
-  function fullscreenOnScreen(screenName) {
+  // True when the Hyprland monitor behind the given screen has a real
+  // fullscreen app (client fullscreen state 2+) on its active workspace.
+  // Maximized windows report state 1 and keep the bar, so they are
+  // ignored. Workspace.hasFullscreen is true for both states and cannot
+  // tell them apart.
+  function realFullscreenOnScreen(screenName) {
     var mons = Hyprland.monitors.values
     for (var i = 0; i < mons.length; i++) {
       if (mons[i].name === screenName) {
         var ws = mons[i].activeWorkspace
-        return ws !== null && ws !== undefined && ws.hasFullscreen
+        if (ws === null || ws === undefined)
+          return false
+        var tls = ws.toplevels.values
+        for (var k = 0; k < tls.length; k++) {
+          var o = tls[k].lastIpcObject
+          if (o && o.fullscreen > 1)
+            return true
+        }
+        return false
       }
     }
     return false
@@ -56,7 +67,7 @@ PanelWindow {
   anchors.left: true
   anchors.right: true
   implicitHeight: Spacing.lg
-  color: Color.background
+  color: "transparent"
   // Hidden when every monitor is fullscreen (barScreen null): no free
   // monitor exists, so unmapping beats covering a fullscreen window.
   // A null screen is tolerated while hidden (same pattern as
@@ -64,14 +75,16 @@ PanelWindow {
   visible: root.barScreen !== null
   screen: root.barScreen
 
-  // Painted first so module borders sit on top of it where they meet.
-  Border {
-    anchors.fill: parent
-    showTop: false
-    showLeft: false
-    showRight: false
-    borderWidth: 2
-    borderColor: root.bottomBorderColor
+  // Toplevel IPC snapshots go stale across fullscreen transitions unless
+  // re-fetched, so refresh them when Hyprland reports window changes.
+  Connections {
+    function onRawEvent(event) {
+      var n = event.name
+      if (n === "fullscreen" || n === "openwindow" || n === "closewindow" || n === "movewindow")
+        Hyprland.refreshToplevels()
+    }
+
+    target: Hyprland
   }
   WorkspaceSwitcher {
     id: switcher
