@@ -21,12 +21,12 @@ Item {
   property real trackHeight: 24
   property real knobSize: 16
   property real knobInset: 4
-  property color trackColor: Color.altSurface
-  property color hoverTrackColor: Color.surface
-  property color checkedColor: Color.primary
-  property color knobColor: Color.text
-  property color checkedKnobColor: Color.background
-  property color disabledTrackColor: Color.surface
+  property color trackColor: Theme.altSurface
+  property color hoverTrackColor: Theme.surface
+  property color checkedColor: Theme.primary
+  property color knobColor: Theme.text
+  property color checkedKnobColor: Theme.background
+  property color disabledTrackColor: Theme.surface
   readonly property alias hovered: click.hovered
   readonly property alias pressed: press.pressed
 

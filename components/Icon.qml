@@ -12,7 +12,7 @@ import qs.style
 // renders at the same vertical size. Measured once at the reference
 // size (scaling is linear), then applied to the painted font.
 //
-//   Icon { glyph: "\uf011"; size: 16; color: Color.text }
+//   Icon { glyph: "\uf011"; size: 16; color: Theme.text }
 //
 Item {
   id: root
@@ -20,7 +20,7 @@ Item {
   // Single nerd-font glyph to render. Empty renders nothing.
   property string glyph: ""
   property real size: 16
-  property color color: Color.text
+  property color color: Theme.text
   property bool debugBounds: false
   readonly property bool valid: root.glyph !== ""
   readonly property int renderedSize: Math.max(1, Math.round(root.size))

@@ -3,7 +3,7 @@
 //   Border {
 //     anchors.fill: parent
 //     borderWidth: 2
-//     borderColor: Color.primary
+//     borderColor: Theme.primary
 //     showTop: false
 //     chamferBottomLeft: true
 //     chamferBottomRight: true

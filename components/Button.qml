@@ -16,13 +16,13 @@ Item {
   property real padding: Spacing.sm
   property real radius: 0
   // Generic surface defaults from `qs.style`; override per use.
-  property color background: Color.altSurface
-  property color hoverBackground: Color.surface
-  property color pressedBackground: Color.background
-  property color disabledBackground: Color.surface
-  property color textColor: Color.text
+  property color background: Theme.altSurface
+  property color hoverBackground: Theme.surface
+  property color pressedBackground: Theme.background
+  property color disabledBackground: Theme.surface
+  property color textColor: Theme.text
   property color hoverTextColor: root.textColor
-  property color disabledTextColor: Color.muted
+  property color disabledTextColor: Theme.muted
   readonly property alias hovered: click.hovered
   readonly property alias pressed: press.pressed
 

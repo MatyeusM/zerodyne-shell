@@ -47,17 +47,17 @@ PanelWindow {
   // 89, tertiary at 90+.
   function sevColor(p) {
     if (p >= 90)
-      return Color.tertiary
+      return Theme.tertiary
     if (p >= 71)
-      return Color.secondary
-    return Color.primary
+      return Theme.secondary
+    return Theme.primary
   }
   // Overlay label ink over a solid fill: dark on the bright fills, light
   // on tertiary.
   function fillTextColor(p) {
     if (p >= 90)
-      return Color.text
-    return Color.background
+      return Theme.text
+    return Theme.background
   }
   function singleFill(frac, color) {
     var f = {}
@@ -84,7 +84,7 @@ PanelWindow {
     if (swapTotal > 0 && total > 0) {
       var ghost = {}
       ghost.fraction = swapFree / total
-      ghost.color = Color.alpha(root.sevColor(root.memPct), 0.2)
+      ghost.color = Theme.alpha(root.sevColor(root.memPct), 0.2)
       out.push(ghost)
     }
     return out
@@ -259,10 +259,10 @@ PanelWindow {
     anchors.topMargin: Spacing.lg + Spacing.xs
     x: Math.max(0, root.anchorX - root.cardWidth)
     width: root.cardWidth
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.md
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferTopLeft: true
     chamferBottomRight: true
@@ -327,7 +327,7 @@ PanelWindow {
         width: parent.width
         wrapMode: Text.Wrap
         text: root.error
-        color: Color.tertiary
+        color: Theme.tertiary
         font: Typography.display({
                                    "size": Typography.sm
                                  })

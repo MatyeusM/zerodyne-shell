@@ -3,8 +3,8 @@
 //   HoverColor {
 //     id: hoverFg
 //     hovered: click.hovered
-//     normalColor: Color.text
-//     hoverColor: Color.primary
+//     normalColor: Theme.text
+//     hoverColor: Theme.primary
 //   }
 //   Text { color: hoverFg.current }
 

@@ -83,7 +83,7 @@ Item {
 
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
     cornerStyle: Container.Chamfered
     chamferBottomRight: true
     chamferSize: Spacing.sm
@@ -127,7 +127,7 @@ Item {
     showTop: false
     showLeft: false
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferBottomRight: true
     chamferSize: Spacing.sm

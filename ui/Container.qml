@@ -1,6 +1,6 @@
 // Reusable content container with background and padding.
 //   Container {
-//     background: Color.surface
+//     background: Theme.surface
 //     padding: Spacing.sm
 //     radius: 4
 //     Text { text: "hello" }

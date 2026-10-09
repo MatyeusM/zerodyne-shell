@@ -141,7 +141,7 @@ Column {
 
     Text {
       text: "CONNECTED"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
         "size": Typography.sm
       })
@@ -192,7 +192,7 @@ Column {
         // on its own; binding height to implicitHeight loops.
         visible: root.sectionTitle(index) !== ""
         text: root.sectionTitle(index)
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
           "size": Typography.sm
         })
@@ -217,7 +217,7 @@ Column {
     width: parent.width
     wrapMode: Text.Wrap
     text: root.emptyText
-    color: Color.muted
+    color: Theme.muted
     font: Typography.display({
       "size": Typography.sm
     })

@@ -19,7 +19,7 @@ RowLayout {
   Text {
     Layout.alignment: Qt.AlignVCenter
     text: "Profile"
-    color: Color.muted
+    color: Theme.muted
     font: Typography.display({
                                "size": Typography.sm
                              })
@@ -45,8 +45,8 @@ RowLayout {
         id: profileHover
 
         hovered: profileClick.hovered
-        normalColor: modelData === row.active ? Color.primary : Color.text
-        hoverColor: Color.secondary
+        normalColor: modelData === row.active ? Theme.primary : Theme.text
+        hoverColor: Theme.secondary
       }
       Text {
         id: name

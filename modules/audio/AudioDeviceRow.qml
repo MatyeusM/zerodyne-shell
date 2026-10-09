@@ -32,8 +32,8 @@ Item {
     id: hoverFg
 
     hovered: rowClick.hovered
-    normalColor: Color.text
-    hoverColor: Color.secondary
+    normalColor: Theme.text
+    hoverColor: Theme.secondary
   }
   RowLayout {
     id: inner

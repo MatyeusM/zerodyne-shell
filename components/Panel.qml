@@ -14,12 +14,12 @@ import qs.ui
 Item {
   id: root
 
-  property color background: Color.surface
+  property color background: Theme.surface
   property real padding: 0
   property real radius: 0
   property bool borderVisible: true
   property real borderWidth: 0
-  property color borderColor: Color.muted
+  property color borderColor: Theme.muted
   property int cornerStyle: Border.Square
   property real cornerRadius: 0
   property bool chamferTopLeft: false

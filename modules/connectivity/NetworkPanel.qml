@@ -267,10 +267,10 @@ PanelWindow {
     anchors.top: parent.top
     anchors.topMargin: Spacing.lg + Spacing.xs
     x: Math.max(0, root.anchorX - implicitWidth)
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.md
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferTopLeft: true
     chamferBottomRight: true
@@ -293,7 +293,7 @@ PanelWindow {
         width: hero.width
         wrapMode: Text.Wrap
         text: root.error
-        color: Color.tertiary
+        color: Theme.tertiary
         font: Typography.display({
                                    "size": Typography.sm
                                  })

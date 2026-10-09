@@ -71,7 +71,7 @@ Item {
 
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
   }
   Row {
     id: row
@@ -98,7 +98,7 @@ Item {
     showLeft: false
     showRight: false
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
   }
   TrayMenu {
     open: root.menuOpen
@@ -126,7 +126,7 @@ Item {
 
       hovered: click.hovered
       normalBackground: "transparent"
-      hoverBackground: Color.altSurface
+      hoverBackground: Theme.altSurface
     }
     Rectangle {
       anchors.fill: parent
@@ -172,7 +172,7 @@ Item {
       source: iconImage
       visible: iconRoot.symbolic
       colorization: 1.0
-      colorizationColor: Color.text
+      colorizationColor: Theme.text
     }
   }
 }

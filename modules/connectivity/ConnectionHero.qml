@@ -55,7 +55,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     glyph: root.glyph()
     size: Typography.xl
-    color: Color.primary
+    color: Theme.primary
   }
   Column {
     id: labels
@@ -66,14 +66,14 @@ Item {
 
     Text {
       text: root.title()
-      color: Color.text
+      color: Theme.text
       font: Typography.display({
                                  "size": Typography.sm
                                })
     }
     Text {
       text: root.subtitle()
-      color: Color.muted
+      color: Theme.muted
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -101,8 +101,8 @@ Item {
         id: qrHover
 
         hovered: qrClick.hovered
-        normalColor: Color.text
-        hoverColor: Color.secondary
+        normalColor: Theme.text
+        hoverColor: Theme.secondary
       }
       Icon {
         id: qrIcon
@@ -129,8 +129,8 @@ Item {
         id: discHover
 
         hovered: discClick.hovered
-        normalColor: Color.text
-        hoverColor: Color.secondary
+        normalColor: Theme.text
+        hoverColor: Theme.secondary
       }
       Icon {
         id: discIcon

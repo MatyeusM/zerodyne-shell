@@ -24,7 +24,7 @@ Item {
     anchors.left: parent.left
     anchors.verticalCenter: parent.verticalCenter
     text: "Band"
-    color: Color.muted
+    color: Theme.muted
     font: Typography.display({
                                "size": Typography.sm
                              })
@@ -43,7 +43,7 @@ Item {
         required property string modelData
 
         text: modelData === "auto" ? "Auto" : modelData + " GHz"
-        color: modelData === root.band.selected ? Color.primary : bandHover.current
+        color: modelData === root.band.selected ? Theme.primary : bandHover.current
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -59,8 +59,8 @@ Item {
           id: bandHover
 
           hovered: bandClick.hovered
-          normalColor: Color.text
-          hoverColor: Color.secondary
+          normalColor: Theme.text
+          hoverColor: Theme.secondary
         }
       }
     }

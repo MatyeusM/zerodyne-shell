@@ -79,10 +79,10 @@ PanelWindow {
     anchors.top: parent.top
     anchors.topMargin: Spacing.lg + Spacing.xs
     anchors.horizontalCenter: parent.horizontalCenter
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.md
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferTopLeft: true
     chamferBottomRight: true
@@ -95,7 +95,7 @@ PanelWindow {
         width: grid.width
         horizontalAlignment: Text.AlignHCenter
         text: root.monthLabel
-        color: Color.text
+        color: Theme.text
         font: Typography.display()
       }
       Grid {
@@ -113,7 +113,7 @@ PanelWindow {
             width: Spacing.lg
             horizontalAlignment: Text.AlignHCenter
             text: root.locale.dayName(root.qtWeekday(index), Locale.NarrowFormat)
-            color: Color.muted
+            color: Theme.muted
             font: Typography.mono({
                                     "size": Typography.xs
                                   })
@@ -128,14 +128,14 @@ PanelWindow {
 
             width: Spacing.lg
             height: Spacing.lg
-            background: day !== 0 && day === root.today.getDate() ? Color.primary : "transparent"
+            background: day !== 0 && day === root.today.getDate() ? Theme.primary : "transparent"
 
             Text {
               anchors.fill: parent
               horizontalAlignment: Text.AlignHCenter
               verticalAlignment: Text.AlignVCenter
               text: day === 0 ? "" : String(day)
-              color: day !== 0 && day === root.today.getDate() ? Color.background : Color.text
+              color: day !== 0 && day === root.today.getDate() ? Theme.background : Theme.text
               font: Typography.mono({
                                       "size": Typography.xs
                                     })

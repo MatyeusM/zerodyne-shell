@@ -12,10 +12,10 @@ import qs.style
 // track-colored label).
 //
 //   PerformanceBar {
-//     fills: [{fraction: 0.4, color: Color.primary}]
+//     fills: [{fraction: 0.4, color: Theme.primary}]
 //     fillEnd: 0.4
 //     overlayText: "42%"
-//     fillTextColor: Color.background
+//     fillTextColor: Theme.background
 //   }
 Item {
   id: root
@@ -23,15 +23,15 @@ Item {
   property var fills: []
   property real fillEnd: 0
   property string overlayText: ""
-  property color fillTextColor: Color.background
-  property color trackTextColor: Color.text
+  property color fillTextColor: Theme.background
+  property color trackTextColor: Theme.text
   readonly property real clipEnd: Math.max(0, Math.min(1, root.fillEnd))
 
   implicitHeight: Spacing.lg
 
   Rectangle {
     anchors.fill: parent
-    color: Color.altSurface
+    color: Theme.altSurface
   }
   Row {
     anchors.fill: parent

@@ -99,7 +99,7 @@ Item {
   }
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
     cornerStyle: Container.Chamfered
     chamferBottomRight: true
     chamferSize: Spacing.sm
@@ -140,14 +140,14 @@ Item {
             id: btHover
 
             hovered: btClick.hovered
-            normalColor: Color.text
-            hoverColor: Color.secondary
+            normalColor: Theme.text
+            hoverColor: Theme.secondary
           }
           Icon {
             anchors.centerIn: parent
             glyph: root.btGlyph()
             size: root.iconSize
-            color: root.btPowered ? btHover.current : Color.muted
+            color: root.btPowered ? btHover.current : Theme.muted
           }
         }
         Item {
@@ -168,14 +168,14 @@ Item {
             id: wifiHover
 
             hovered: wifiClick.hovered
-            normalColor: Color.text
-            hoverColor: Color.secondary
+            normalColor: Theme.text
+            hoverColor: Theme.secondary
           }
           Icon {
             anchors.centerIn: parent
             glyph: root.glyph()
             size: root.iconSize
-            color: root.connected ? wifiHover.current : Color.muted
+            color: root.connected ? wifiHover.current : Theme.muted
           }
         }
       }
@@ -190,7 +190,7 @@ Item {
     // No left edge: sits flush against the clock, whose right edge divides.
     showLeft: false
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferBottomRight: true
     chamferSize: Spacing.sm

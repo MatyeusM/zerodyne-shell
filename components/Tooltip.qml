@@ -22,8 +22,8 @@ PopupWindow {
   property string text: ""
   property real padding: Spacing.sm
   property real radius: 0
-  property color background: Color.surface
-  property color borderColor: Color.muted
+  property color background: Theme.surface
+  property color borderColor: Theme.muted
   property real borderWidth: 1
 
   visible: false
@@ -42,7 +42,7 @@ PopupWindow {
 
     Text {
       text: root.text
-      color: Color.text
+      color: Theme.text
       font: Typography.display({
                                  "size": Typography.sm
                                })

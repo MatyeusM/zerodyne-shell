@@ -43,12 +43,12 @@ Item {
   }
   function loadColor() {
     if (!root.connected)
-      return Color.muted
+      return Theme.muted
     if (root.topPct >= 90)
-      return Color.tertiary
+      return Theme.tertiary
     if (root.topPct >= 71)
-      return Color.secondary
-    return Color.text
+      return Theme.secondary
+    return Theme.text
   }
   function refresh() {
     if (!perfProc.running)
@@ -105,11 +105,11 @@ Item {
 
     hovered: click.hovered
     normalColor: root.loadColor()
-    hoverColor: Color.secondary
+    hoverColor: Theme.secondary
   }
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
     cornerStyle: Container.Chamfered
     chamferBottomLeft: true
     chamferSize: Spacing.sm
@@ -126,7 +126,7 @@ Item {
         Layout.alignment: Qt.AlignVCenter
         glyph: Zerodyne.perfBatteryGlyph(root.topPct)
         size: root.iconSize
-        color: root.connected ? hoverFg.current : Color.muted
+        color: root.connected ? hoverFg.current : Theme.muted
       }
     }
   }
@@ -143,7 +143,7 @@ Item {
     // No right edge: tucked under the tray, whose left edge divides.
     showRight: false
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferBottomLeft: true
     chamferSize: Spacing.sm

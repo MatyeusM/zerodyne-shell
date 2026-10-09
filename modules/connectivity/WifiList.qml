@@ -22,7 +22,7 @@ Column {
 
   Text {
     text: root.scanning ? "Wi-Fi networks · scanning…" : "Wi-Fi networks"
-    color: Color.muted
+    color: Theme.muted
     font: Typography.display({
                                "size": Typography.sm
                              })

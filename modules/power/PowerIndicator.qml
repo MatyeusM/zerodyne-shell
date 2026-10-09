@@ -37,12 +37,12 @@ Item {
     id: hoverFg
 
     hovered: click.hovered
-    normalColor: Color.text
-    hoverColor: Color.secondary
+    normalColor: Theme.text
+    hoverColor: Theme.secondary
   }
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
 
     RowLayout {
       anchors.fill: parent
@@ -66,7 +66,7 @@ Item {
     showLeft: false
     showRight: false
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
   }
   PowerPanel {
     open: root.powerOpen

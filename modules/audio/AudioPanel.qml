@@ -154,10 +154,10 @@ PanelWindow {
     anchors.topMargin: Spacing.lg + Spacing.xs
     x: Math.max(0, root.anchorX)
     width: Spacing.xxl * 6
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.md
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferTopRight: true
     chamferBottomLeft: true
@@ -175,19 +175,19 @@ PanelWindow {
           Layout.fillWidth: true
           elide: Text.ElideRight
           text: root.sinkDesc !== "" ? root.sinkDesc : "Audio"
-          color: Color.text
+          color: Theme.text
           font: Typography.display()
         }
         Text {
           text: root.volumePct + "%"
-          color: root.outMuted ? Color.muted : Color.text
+          color: root.outMuted ? Theme.muted : Theme.text
           font: Typography.mono()
           opacity: root.outMuted ? 0.5 : 1.0
         }
       }
       Text {
         text: "OUTPUT"
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -225,7 +225,7 @@ PanelWindow {
       Text {
         visible: root.sinks.length === 0
         text: "No outputs found"
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -234,7 +234,7 @@ PanelWindow {
       }
       Text {
         text: "INPUT"
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -272,7 +272,7 @@ PanelWindow {
       Text {
         visible: root.sources.length === 0
         text: "No inputs found"
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -282,7 +282,7 @@ PanelWindow {
         width: parent.width
         wrapMode: Text.Wrap
         text: root.error
-        color: Color.tertiary
+        color: Theme.tertiary
         font: Typography.display({
                                    "size": Typography.sm
                                  })

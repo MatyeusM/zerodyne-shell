@@ -163,19 +163,19 @@ Item {
     id: outHover
 
     hovered: outClick.hovered
-    normalColor: Color.text
-    hoverColor: Color.secondary
+    normalColor: Theme.text
+    hoverColor: Theme.secondary
   }
   HoverColor {
     id: micHover
 
     hovered: micClick.hovered
-    normalColor: Color.text
-    hoverColor: Color.secondary
+    normalColor: Theme.text
+    hoverColor: Theme.secondary
   }
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
     cornerStyle: Container.Chamfered
     chamferBottomLeft: true
     chamferSize: Spacing.sm
@@ -196,7 +196,7 @@ Item {
         Text {
           Layout.alignment: Qt.AlignVCenter
           text: root.percentText()
-          color: root.outMuted ? Color.muted : outHover.current
+          color: root.outMuted ? Theme.muted : outHover.current
           font: Typography.mono({
                                   "size": Typography.sm
                                 })
@@ -210,20 +210,20 @@ Item {
           Icon {
             glyph: root.deviceGlyph()
             size: root.iconSize
-            color: root.outMuted ? Color.muted : outHover.current
+            color: root.outMuted ? Theme.muted : outHover.current
           }
           Icon {
             visible: root.sinkBt
             glyph: Zerodyne.glyphBluetooth
             size: root.iconSize
-            color: root.outMuted ? Color.muted : outHover.current
+            color: root.outMuted ? Theme.muted : outHover.current
           }
         }
         Icon {
           Layout.alignment: Qt.AlignVCenter
           glyph: Zerodyne.audioSourceGlyph(root.inputMuted)
           size: root.iconSize
-          color: !root.sourcePresent || root.inputMuted ? Color.muted : micHover.current
+          color: !root.sourcePresent || root.inputMuted ? Theme.muted : micHover.current
         }
       }
       Item {
@@ -237,7 +237,7 @@ Item {
     // No right edge: sits flush against the clock, whose left edge divides.
     showRight: false
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferBottomLeft: true
     chamferSize: Spacing.sm

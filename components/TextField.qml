@@ -23,11 +23,11 @@ Item {
   property int maximumLength: 32767
   property real fieldPadding: Spacing.sm
   property real radius: 0
-  property color background: Color.altSurface
-  property color hoverBackground: Color.surface
-  property color textColor: Color.text
-  property color placeholderColor: Color.muted
-  property color disabledTextColor: Color.muted
+  property color background: Theme.altSurface
+  property color hoverBackground: Theme.surface
+  property color textColor: Theme.text
+  property color placeholderColor: Theme.muted
+  property color disabledTextColor: Theme.muted
   readonly property alias hovered: hover.hovered
   readonly property alias focused: input.activeFocus
 
@@ -66,8 +66,8 @@ Item {
       verticalAlignment: TextInput.AlignVCenter
       clip: true
       color: root.disabled ? root.disabledTextColor : root.textColor
-      selectionColor: Color.primary
-      selectedTextColor: Color.background
+      selectionColor: Theme.primary
+      selectedTextColor: Theme.background
       cursorVisible: focused && !root.disabled
       readOnly: disabledState.disabled
       echoMode: root.echoMode

@@ -26,7 +26,7 @@ Item {
 
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
     cornerStyle: Container.Chamfered
     chamferBottomLeft: true
     chamferSize: Spacing.sm
@@ -43,7 +43,7 @@ Item {
         width: parent.width
         elide: Text.ElideRight
         text: root.app
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.xs
                                  })
@@ -62,7 +62,7 @@ Item {
         wrapMode: Text.WordWrap
         textFormat: Text.StyledText
         text: root.body
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -72,7 +72,7 @@ Item {
   Border {
     anchors.fill: parent
     borderWidth: 2
-    borderColor: root.critical ? Color.tertiary : Color.primary
+    borderColor: root.critical ? Theme.tertiary : Theme.primary
     cornerStyle: Border.Chamfered
     chamferBottomLeft: true
     chamferSize: Spacing.sm
@@ -94,7 +94,7 @@ Item {
     id: summaryHover
 
     hovered: click.hovered
-    normalColor: Color.text
-    hoverColor: Color.secondary
+    normalColor: Theme.text
+    hoverColor: Theme.secondary
   }
 }

@@ -50,14 +50,14 @@ Item {
     anchors.right: parent.right
     anchors.verticalCenter: parent.verticalCenter
     height: Spacing.xxs
-    color: Color.muted
+    color: Theme.muted
   }
   Rectangle {
     anchors.left: track.left
     anchors.verticalCenter: track.verticalCenter
     width: track.width * root.fraction
     height: track.height
-    color: Color.text
+    color: Theme.text
   }
   Rectangle {
     anchors.verticalCenter: track.verticalCenter
@@ -65,7 +65,7 @@ Item {
     width: Spacing.sm
     height: Spacing.sm
     radius: width / 2
-    color: Color.text
+    color: Theme.text
   }
   MouseArea {
     anchors.fill: parent

@@ -32,12 +32,12 @@ Item {
     id: hoverFg
 
     hovered: click.hovered && !root.active
-    normalColor: root.active ? Color.primary : Color.text
-    hoverColor: Color.secondary
+    normalColor: root.active ? Theme.primary : Theme.text
+    hoverColor: Theme.secondary
   }
   Container {
     anchors.fill: parent
-    background: root.active ? Color.altSurface : "transparent"
+    background: root.active ? Theme.altSurface : "transparent"
 
     Text {
       id: labelItem
@@ -49,7 +49,7 @@ Item {
       horizontalAlignment: Text.AlignHCenter
       verticalAlignment: Text.AlignVCenter
       text: root.label
-      color: root.disabled ? Color.muted : hoverFg.current
+      color: root.disabled ? Theme.muted : hoverFg.current
       font: Typography.display()
     }
   }

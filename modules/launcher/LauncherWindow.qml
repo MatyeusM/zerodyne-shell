@@ -102,10 +102,10 @@ PanelWindow {
 
     anchors.centerIn: parent
     width: Sizing.xl
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.md
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Container.Chamfered
     chamferTopLeft: true
     chamferTopRight: false
@@ -158,7 +158,7 @@ PanelWindow {
 
           Rectangle {
             anchors.fill: parent
-            color: launcher.selected === row.index ? Color.altSurface : "transparent"
+            color: launcher.selected === row.index ? Theme.altSurface : "transparent"
           }
           IconImage {
             anchors.left: parent.left
@@ -193,7 +193,7 @@ PanelWindow {
               elide: Text.ElideRight
               textFormat: Text.PlainText
               text: row.modelData.comment || ""
-              color: Color.muted
+              color: Theme.muted
               font: Typography.display({
                                          "size": Typography.xs
                                        })
@@ -231,8 +231,8 @@ PanelWindow {
             // (movement-gated above), never highlights directly, so a
             // static cursor under a rebuilt list shows nothing extra.
             hovered: launcher.selected === row.index
-            normalColor: Color.text
-            hoverColor: Color.primary
+            normalColor: Theme.text
+            hoverColor: Theme.primary
           }
         }
       }
@@ -241,7 +241,7 @@ PanelWindow {
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
         text: "No matching application"
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.sm
                                  })

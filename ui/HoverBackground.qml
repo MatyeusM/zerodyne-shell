@@ -4,8 +4,8 @@
 //   HoverBackground {
 //     id: hoverBg
 //     hovered: click.hovered
-//     normalBackground: Color.altSurface
-//     hoverBackground: Color.surface
+//     normalBackground: Theme.altSurface
+//     hoverBackground: Theme.surface
 //   }
 //   Container { background: hoverBg.current }
 

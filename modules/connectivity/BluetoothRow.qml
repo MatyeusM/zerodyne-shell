@@ -70,8 +70,8 @@ Item {
         id: hoverFg
 
         hovered: mainClick.hovered
-        normalColor: row.connected ? Color.primary : Color.text
-        hoverColor: Color.secondary
+        normalColor: row.connected ? Theme.primary : Theme.text
+        hoverColor: Theme.secondary
       }
       Icon {
         id: glyph
@@ -103,8 +103,8 @@ Item {
           id: forgetHover
 
           hovered: forgetClick.hovered
-          normalColor: Color.muted
-          hoverColor: Color.secondary
+          normalColor: Theme.muted
+          hoverColor: Theme.secondary
         }
         Icon {
           id: forgetIcon
@@ -138,7 +138,7 @@ Item {
           width: parent.width
           elide: Text.ElideRight
           text: row.statusText
-          color: Color.muted
+          color: Theme.muted
           font: Typography.mono({
                                   "size": Typography.xs
                                 })

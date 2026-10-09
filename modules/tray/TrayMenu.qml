@@ -114,10 +114,10 @@ PanelWindow {
     anchors.top: parent.top
     anchors.topMargin: Spacing.lg + Spacing.xs
     x: Math.max(0, root.anchorX - implicitWidth)
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.sm
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferTopLeft: true
     chamferBottomRight: true
@@ -149,7 +149,7 @@ PanelWindow {
 
           hovered: backClick.hovered
           normalBackground: "transparent"
-          hoverBackground: Color.altSurface
+          hoverBackground: Theme.altSurface
         }
         Rectangle {
           anchors.fill: parent
@@ -160,7 +160,7 @@ PanelWindow {
           anchors.leftMargin: Spacing.sm
           anchors.verticalCenter: parent.verticalCenter
           text: "‹"
-          color: Color.muted
+          color: Theme.muted
           font: Typography.display({
                                      size: Typography.md
                                    })
@@ -174,7 +174,7 @@ PanelWindow {
           anchors.rightMargin: Spacing.sm
           anchors.verticalCenter: parent.verticalCenter
           text: root.currentTitle
-          color: Color.text
+          color: Theme.text
           font: Typography.display({
                                      size: Typography.sm
                                    })
@@ -189,7 +189,7 @@ PanelWindow {
         topPadding: Spacing.xs
         bottomPadding: Spacing.xs
         text: "No actions"
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    size: Typography.sm
                                  })
@@ -257,7 +257,7 @@ PanelWindow {
 
                 hovered: rowClick.hovered
                 normalBackground: "transparent"
-                hoverBackground: Color.altSurface
+                hoverBackground: Theme.altSurface
               }
               Rectangle {
                 anchors.fill: parent
@@ -282,7 +282,7 @@ PanelWindow {
                   visible: menuRow.checked
                   glyph: "\uf00c"
                   size: Typography.sm
-                  color: Color.text
+                  color: Theme.text
                 }
                 Image {
                   anchors.verticalCenter: parent.verticalCenter
@@ -297,7 +297,7 @@ PanelWindow {
                 Text {
                   anchors.verticalCenter: parent.verticalCenter
                   text: menuRow.rowText
-                  color: Color.text
+                  color: Theme.text
                   font: Typography.display({
                                              size: Typography.sm
                                            })
@@ -309,7 +309,7 @@ PanelWindow {
                 anchors.rightMargin: Spacing.sm
                 anchors.verticalCenter: parent.verticalCenter
                 text: "›"
-                color: Color.muted
+                color: Theme.muted
                 font: Typography.display({
                                            size: Typography.md
                                          })

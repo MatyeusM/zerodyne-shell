@@ -98,10 +98,10 @@ PanelWindow {
   }
   Panel {
     anchors.centerIn: parent
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.md
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Container.Chamfered
     chamferTopLeft: true
     chamferTopRight: false
@@ -116,7 +116,7 @@ PanelWindow {
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
         text: root.qr !== null ? root.qr.ssid : (root.loading ? "Loading…" : "Share Wi-Fi")
-        color: Color.text
+        color: Theme.text
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -141,7 +141,7 @@ PanelWindow {
 
               width: root.modulePx()
               height: root.modulePx()
-              color: root.cellOn(index) ? Color.background : "transparent"
+              color: root.cellOn(index) ? Theme.background : "transparent"
             }
           }
         }
@@ -151,7 +151,7 @@ PanelWindow {
         width: parent.width
         wrapMode: Text.Wrap
         text: root.error
-        color: Color.tertiary
+        color: Theme.tertiary
         font: Typography.display({
                                    "size": Typography.sm
                                  })
@@ -161,7 +161,7 @@ PanelWindow {
         width: parent.width
         horizontalAlignment: Text.AlignHCenter
         text: root.qr !== null ? String(root.qr.password) : ""
-        color: Color.muted
+        color: Theme.muted
         font: Typography.display({
                                    "size": Typography.sm
                                  })

@@ -38,8 +38,8 @@ Item {
     id: hoverFg
 
     hovered: click.hovered
-    normalColor: Color.primary
-    hoverColor: Color.secondary
+    normalColor: Theme.primary
+    hoverColor: Theme.secondary
   }
   // Rajdhani is not monospaced, so measure a fixed widest-case sample.
   // Keeps the element (and its borders) stable as digits change.
@@ -51,7 +51,7 @@ Item {
   }
   Container {
     anchors.fill: parent
-    background: Color.surface
+    background: Theme.surface
     cornerStyle: Container.Chamfered
     chamferBottomLeft: true
     chamferBottomRight: true
@@ -75,7 +75,7 @@ Item {
     anchors.fill: parent
     showTop: false
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Border.Chamfered
     chamferBottomLeft: true
     chamferBottomRight: true

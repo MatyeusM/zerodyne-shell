@@ -14,7 +14,7 @@ Item {
 
   property int orientation: Qt.Horizontal
   property real thickness: 1
-  property color color: Color.muted
+  property color color: Theme.muted
   readonly property bool isHorizontal: root.orientation === Qt.Horizontal
 
   anchors.left: root.isHorizontal ? parent.left : undefined

@@ -18,7 +18,7 @@ RowLayout {
   property var fills: []
   property real fillEnd: 0
   property string overlayText: ""
-  property color fillTextColor: Color.background
+  property color fillTextColor: Theme.background
   property real labelWidth: 0
 
   spacing: Spacing.sm
@@ -31,7 +31,7 @@ RowLayout {
       width: parent.width
       elide: Text.ElideRight
       text: row.title
-      color: Color.text
+      color: Theme.text
       font: Typography.display({
                                  "size": Typography.sm
                                })
@@ -40,7 +40,7 @@ RowLayout {
       width: parent.width
       elide: Text.ElideRight
       text: row.subtitle
-      color: Color.muted
+      color: Theme.muted
       font: Typography.mono({
                               "size": Typography.xs
                             })

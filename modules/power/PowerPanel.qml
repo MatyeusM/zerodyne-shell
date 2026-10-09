@@ -77,10 +77,10 @@ PanelWindow {
   }
   Panel {
     anchors.centerIn: parent
-    background: Color.surface
+    background: Theme.surface
     padding: Spacing.lg
     borderWidth: 2
-    borderColor: Color.primary
+    borderColor: Theme.primary
     cornerStyle: Container.Chamfered
     chamferTopLeft: true
     chamferTopRight: false
@@ -111,8 +111,8 @@ PanelWindow {
             id: entryHover
 
             hovered: entryClick.hovered
-            normalColor: Color.text
-            hoverColor: Color.secondary
+            normalColor: Theme.text
+            hoverColor: Theme.secondary
           }
           ColumnLayout {
             id: entry

@@ -52,7 +52,7 @@ Column {
   }
   Text {
     text: "Statistics"
-    color: Color.muted
+    color: Theme.muted
     font: Typography.display({
                                "size": Typography.sm
                              })
@@ -65,14 +65,14 @@ Column {
     Text {
       width: labelMeasure.width
       text: "Ping"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
     }
     Text {
       text: root.formatMs(root.link && root.link.internet_ping_avg_ms)
-      color: Color.text
+      color: Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -80,7 +80,7 @@ Column {
     Text {
       width: labelMeasure.width
       text: "Packet Loss"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
@@ -88,7 +88,7 @@ Column {
     Text {
       text: root.link && root.link.internet_loss_pct !== undefined ? root.link.internet_loss_pct
                                                                      + "%" : "--"
-      color: root.link && root.link.internet_loss_pct > 0 ? Color.tertiary : Color.text
+      color: root.link && root.link.internet_loss_pct > 0 ? Theme.tertiary : Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -96,14 +96,14 @@ Column {
     Text {
       width: labelMeasure.width
       text: "Receiving"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
     }
     Text {
       text: root.formatRate(root.link && root.link.download_bps)
-      color: Color.text
+      color: Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -111,14 +111,14 @@ Column {
     Text {
       width: labelMeasure.width
       text: "Sending"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
     }
     Text {
       text: root.formatRate(root.link && root.link.upload_bps)
-      color: Color.text
+      color: Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -126,14 +126,14 @@ Column {
     Text {
       width: labelMeasure.width
       text: "Downloaded"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
     }
     Text {
       text: root.formatBytes(root.link && root.link.rx_bytes)
-      color: Color.text
+      color: Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -141,14 +141,14 @@ Column {
     Text {
       width: labelMeasure.width
       text: "Uploaded"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
     }
     Text {
       text: root.formatBytes(root.link && root.link.tx_bytes)
-      color: Color.text
+      color: Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -156,14 +156,14 @@ Column {
     Text {
       width: labelMeasure.width
       text: "IP Address"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
     }
     Text {
       text: root.num(root.link && root.link.ip)
-      color: Color.text
+      color: Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })
@@ -171,14 +171,14 @@ Column {
     Text {
       width: labelMeasure.width
       text: "Gateway"
-      color: Color.muted
+      color: Theme.muted
       font: Typography.display({
                                  "size": Typography.xs
                                })
     }
     Text {
       text: root.num(root.link && root.link.gateway)
-      color: Color.text
+      color: Theme.text
       font: Typography.mono({
                               "size": Typography.xs
                             })

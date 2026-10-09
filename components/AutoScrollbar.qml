@@ -31,6 +31,6 @@ ScrollBar {
 
   contentItem: Rectangle {
     implicitWidth: 2
-    color: Color.text
+    color: Theme.text
   }
 }

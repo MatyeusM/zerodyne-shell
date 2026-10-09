@@ -74,8 +74,8 @@ Item {
         id: hoverFg
 
         hovered: mainClick.hovered && row.clickable
-        normalColor: row.inUse ? Color.primary : Color.text
-        hoverColor: Color.secondary
+        normalColor: row.inUse ? Theme.primary : Theme.text
+        hoverColor: Theme.secondary
       }
       RowLayout {
         anchors.fill: parent
@@ -117,8 +117,8 @@ Item {
             id: forgetHover
 
             hovered: forgetClick.hovered
-            normalColor: Color.muted
-            hoverColor: Color.secondary
+            normalColor: Theme.muted
+            hoverColor: Theme.secondary
           }
           Icon {
             id: forgetIcon
@@ -133,7 +133,7 @@ Item {
           Layout.alignment: Qt.AlignVCenter
           visible: row.secured
           text: Zerodyne.glyphLock
-          color: Color.muted
+          color: Theme.muted
           font: Typography.mono({
                                   "size": Typography.xs
                                 })
@@ -164,8 +164,8 @@ Item {
         hoverBackground: "transparent"
         pressedBackground: "transparent"
         disabledBackground: "transparent"
-        textColor: Color.muted
-        hoverTextColor: Color.secondary
+        textColor: Theme.muted
+        hoverTextColor: Theme.secondary
 
         onClicked: {
           passphrase.text = ""

@@ -38,7 +38,7 @@ Item {
     anchors.verticalCenter: parent.verticalCenter
     glyph: Zerodyne.bluetoothGlyph(root.powered, root.connectedCount > 0)
     size: Typography.xl
-    color: root.powered ? Color.primary : Color.muted
+    color: root.powered ? Theme.primary : Theme.muted
   }
   Item {
     id: powerSlot
@@ -61,8 +61,8 @@ Item {
       id: powerHover
 
       hovered: powerClick.hovered
-      normalColor: Color.text
-      hoverColor: Color.secondary
+      normalColor: Theme.text
+      hoverColor: Theme.secondary
     }
     Icon {
       id: powerIcon
@@ -82,14 +82,14 @@ Item {
 
     Text {
       text: "Bluetooth"
-      color: Color.text
+      color: Theme.text
       font: Typography.display({
                                  "size": Typography.sm
                                })
     }
     Text {
       text: root.subtitle()
-      color: Color.muted
+      color: Theme.muted
       font: Typography.mono({
                               "size": Typography.xs
                             })
