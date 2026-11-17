@@ -1,6 +1,4 @@
 [tools]
-# Go toolchain for zerodyne daemon (pin to 1.27 to match system; bump as needed)
-go = "latest"
 # Used by `mise watch` — installed automatically on first `mise watch`/`mise run dev:watch`
 watchexec = "latest"
 
@@ -14,11 +12,24 @@ QT_SELECT = "6"
 QT_VERSION = "6"
 
 [tasks.build]
-description = "Compile zerodyne Go daemon to bin/zerodyne"
-# Build from zerodyne module dir so no root go.mod is required
-run = "mkdir -p bin && go -C zerodyne build -o ../bin/zerodyne ./cmd/zerodyne"
-sources = ["zerodyne/**/*.go", "zerodyne/go.mod", "zerodyne/go.sum"]
+description = "Compile the zerodyne Rust daemon to bin/zerodyne"
+run = """
+set -euo pipefail
+mkdir -p bin
+cargo build --release --manifest-path zerodyne/Cargo.toml
+cp zerodyne/target/release/zerodyne bin/zerodyne
+"""
+sources = ["zerodyne/**/*.rs", "zerodyne/Cargo.toml", "zerodyne/Cargo.lock"]
 outputs = ["bin/zerodyne"]
+
+[tasks.check]
+description = "Format, lint and test the zerodyne Rust daemon"
+run = """
+set -euo pipefail
+cargo fmt --manifest-path zerodyne/Cargo.toml --all -- --check
+cargo clippy --manifest-path zerodyne/Cargo.toml --all-targets -- -D warnings
+cargo test --manifest-path zerodyne/Cargo.toml
+"""
 
 [tasks.dev]
 description = "Build and run quickshell (single-shot). Use `mise watch -r dev` for live reload with daemon culling."
@@ -95,7 +106,7 @@ exit "$qs_status"
 """
 
 [tasks."dev:watch"]
-description = "Watch Go + QML, rebuild and restart quickshell (culls daemon). Alias for `mise watch --restart dev`."
+description = "Watch Rust + QML, rebuild and restart quickshell (culls daemon). Alias for `mise watch --restart dev`."
 run = "mise watch --restart dev"
 
 [tasks.watch]
@@ -125,6 +136,7 @@ echo \"fmt-check ok (Qt6: $(qmlformat --version))\"
 description = "Remove build artifacts and stale daemon state"
 run = """
 rm -f bin/zerodyne
+rm -rf zerodyne/target
 rm -f \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zerodyne/zerodyne.sock\"
 rm -f \"${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/zerodyne/zerodyne.pid\"
 rm -f ~/.local/state/zerodyne/zerodyne.sock ~/.local/state/zerodyne/zerodyne.pid 2>/dev/null || true
