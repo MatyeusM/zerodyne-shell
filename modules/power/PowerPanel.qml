@@ -10,13 +10,14 @@ import qs.ui
 
 // Power menu: centered card with one large action per row-entry — LOGOUT,
 // LOCK, RESTART, SHUTDOWN — over a dimmed fullscreen scrim. Scrim click
-// and Escape report closeRequested. Actions are fire-and-forget through
-// zerodyne (`power <action>`); the panel closes on click without waiting.
+// and Escape report closeRequested. LOCK calls the in-shell session lock
+// supplied by shell.qml; the other three are fire-and-forget zerodyne ops.
 PanelWindow {
   id: root
 
   property bool open: false
   property var panelScreen: null
+  property var lockService: null
   readonly property real glyphSize: Spacing.xxl
   readonly property var actions: [
     {
@@ -46,6 +47,14 @@ PanelWindow {
   function activate(action) {
     if (execProc.running)
       return
+    if (action === "lock") {
+      if (root.lockService)
+        root.lockService.lock()
+      else
+        console.warn("PowerPanel: no lock service supplied")
+      root.closeRequested()
+      return
+    }
     execProc.command = Zerodyne.execCommand("power", [action])
     execProc.running = true
     root.closeRequested()

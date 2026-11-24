@@ -20,6 +20,10 @@ import qs.style
 PanelWindow {
   id: root
 
+  // Owned by shell.qml; handed to the power menu so LOCK can call the
+  // in-shell session lock instead of an external binary.
+  property var lockService: null
+
   // Logical bar screen: home (first screen) unless it shows a
   // real-fullscreen app, else the first non-fullscreen screen. Maximized
   // windows keep their gaps and the bar, so they never trigger a move.
@@ -143,6 +147,7 @@ PanelWindow {
     anchors.top: parent.top
     anchors.bottom: parent.bottom
     panelScreen: root.barScreen
+    lockService: root.lockService
   }
   Tray {
     id: tray

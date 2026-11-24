@@ -20,6 +20,11 @@ Item {
   property string placeholderText: ""
   property bool disabled: false
   property int echoMode: TextInput.Normal
+  property string passwordCharacter: "\u25CF"
+  property int horizontalAlignment: TextInput.AlignLeft
+  property real letterSpacing: 0
+  property real textLeftPadding: 0
+  property real textRightPadding: 0
   property int maximumLength: 32767
   property real fieldPadding: Spacing.sm
   property real radius: 0
@@ -35,8 +40,8 @@ Item {
   signal editingFinished
 
   function forceFocus(): void {
-  input.forceActiveFocus(Qt.OtherFocusReason)
-}
+    input.forceActiveFocus(Qt.OtherFocusReason)
+  }
 
   implicitWidth: 160
   implicitHeight: input.implicitHeight + root.fieldPadding * 2
@@ -71,10 +76,15 @@ Item {
       cursorVisible: focused && !root.disabled
       readOnly: disabledState.disabled
       echoMode: root.echoMode
+      passwordCharacter: root.passwordCharacter
+      horizontalAlignment: root.horizontalAlignment
       maximumLength: root.maximumLength
-      font: Typography.mono({
-                              "size": Typography.sm
-                            })
+      leftPadding: root.textLeftPadding
+      rightPadding: root.textRightPadding
+      font.family: Typography.monoName
+      font.pixelSize: Typography.sm
+      font.weight: Font.Bold
+      font.letterSpacing: root.letterSpacing
 
       onAccepted: root.accepted()
       onEditingFinished: root.editingFinished()

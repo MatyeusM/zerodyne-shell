@@ -19,7 +19,6 @@ pub const TOOLS: &[&str] = &[
     "wpctl",
     "systemctl",
     "hyprctl",
-    "hyprlock",
     "amd-smi",
     "powerprofilesctl",
 ];

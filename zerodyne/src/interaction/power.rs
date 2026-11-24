@@ -1,8 +1,8 @@
 //! Session power handler, ported from `internal/interaction/power/power.go`.
 //!
-//! All four operations are fire-and-forget: the session ends (or the screen
-//! locks), so there is no state for QML to re-poll. Only usage errors and
-//! command failures are reported.
+//! All operations are fire-and-forget: the session ends, so there is no
+//! state for QML to re-poll. Only usage errors and command failures are
+//! reported. Locking is handled in QML via the in-shell session lock.
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -40,7 +40,7 @@ impl HandlerTrait for Handler {
     }
 
     fn usage(&self) -> &'static str {
-        "power <logout|lock|restart|shutdown>"
+        "power <logout|restart|shutdown>"
     }
 
     fn exec(&self, ctx: &Ctx, args: &[String]) -> Result<ResultData> {
@@ -50,7 +50,6 @@ impl HandlerTrait for Handler {
         let sctx = ctx.with_timeout(Duration::from_secs(10));
         let (cmd, args_for, msg): (&str, &[&str], &str) = match args[0].as_str() {
             "logout" => ("hyprctl", &["dispatch", "hl.dsp.exit()"], "logging out"),
-            "lock" => ("hyprlock", &[], "locked"),
             "restart" => ("systemctl", &["reboot"], "restarting"),
             "shutdown" => ("systemctl", &["poweroff"], "shutting down"),
             _ => return Err(anyhow!("usage: {}", self.usage())),
@@ -91,6 +90,7 @@ mod tests {
             vec![],
             vec!["logout", "extra"],
             vec!["suspend"],
+            vec!["lock"],
             vec!["bogus"],
         ] {
             let a: Vec<String> = args.into_iter().map(String::from).collect();
@@ -106,7 +106,6 @@ mod tests {
     fn power_commands() {
         let cases = [
             ("logout", "hyprctl dispatch hl.dsp.exit()"),
-            ("lock", "hyprlock"),
             ("restart", "systemctl reboot"),
             ("shutdown", "systemctl poweroff"),
         ];

@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Hyprland
 import "modules/bar"
 import "modules/launcher"
+import "modules/lock"
 import "modules/notifications"
 
 ShellRoot {
@@ -27,8 +28,15 @@ ShellRoot {
     return ss.length > 0 ? ss[0] : null
   }
 
+  // Declared before Bar so the power menu can call into it without a
+  // forward reference during hot reload.
+  LockService {
+    id: lock
+  }
   Bar {
     id: bar
+
+    lockService: lock
   }
   Notifications {
     id: notifs

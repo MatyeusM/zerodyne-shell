@@ -15,6 +15,7 @@ Item {
   id: root
 
   property var panelScreen: null
+  property var lockService: null
   property bool powerOpen: false
   // Tuck amount Bar.qml uses to slide the tray under this item.
   readonly property real chamferCut: Spacing.sm
@@ -71,6 +72,7 @@ Item {
   PowerPanel {
     open: root.powerOpen
     panelScreen: root.panelScreen
+    lockService: root.lockService
 
     onCloseRequested: root.powerOpen = false
   }
