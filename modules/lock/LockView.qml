@@ -4,15 +4,17 @@ import qs.components
 import qs.style
 
 // Password view for the session lock. Deliberately small: a three-line clock
-// header and one field. Only the DP-2 surface hosts this; every other output
-// is left dark by LockService. No fingerprint, idle, or suspend logic.
+// header and one field. Instantiated on every surface so keys always have a
+// focused input; showVisuals keeps the clock and dots on the main output only.
+// No fingerprint, idle, or suspend logic.
 Item {
   id: root
 
   property string failureMessage: ""
   property bool authenticating: false
-  // The field only becomes visible once the user actually starts typing.
-  property bool passwordEntered: false
+  property bool showVisuals: true
+  // Shared with LockService so typing on any output renders on the main one.
+  property string passwordText: ""
   readonly property var weekdayNames: ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY",
     "FRIDAY", "SATURDAY"]
   readonly property var monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
@@ -31,7 +33,8 @@ Item {
                                          Typography.lockDate * 1.05)
   readonly property real dotSpacing: dotMetrics.advanceWidth * 0.33
 
-  signal submitPassword(string password)
+  signal passwordEdited(string text)
+  signal submitRequested(string password)
 
   onAuthenticatingChanged: {
     if (!root.authenticating)
@@ -85,6 +88,7 @@ Item {
     anchors.top: parent.top
     anchors.topMargin: Math.max(Spacing.lg, parent.height / 3 - root.headerHeight / 2)
     spacing: 0
+    visible: root.showVisuals
 
     Text {
       anchors.horizontalCenter: parent.horizontalCenter
@@ -152,17 +156,32 @@ Item {
       letterSpacing: root.dotSpacing
       textLeftPadding: root.dotSpacing
       disabled: root.authenticating
-      // Stays in the layout and keeps focus, but is invisible until the
-      // first keystroke lands.
-      opacity: root.passwordEntered ? 1 : 0
+      // Always focusable, even on the dark surfaces. Only the main output
+      // shows the dots, and only after typing has begun.
+      opacity: root.showVisuals && field.text.length > 0 ? 1 : 0
 
-      onTextChanged: root.passwordEntered = field.text.length > 0
+      onTextChanged: {
+        if (field.text !== root.passwordText)
+          root.passwordEdited(field.text)
+      }
       onAccepted: {
         var value = field.text
         field.text = ""
-        root.submitPassword(value)
+        root.submitRequested(value)
       }
-      Component.onCompleted: field.forceFocus()
+      Component.onCompleted: {
+        field.text = root.passwordText
+        field.forceFocus()
+      }
+
+      Connections {
+        function onPasswordTextChanged() {
+          if (field.text !== root.passwordText)
+            field.text = root.passwordText
+        }
+
+        target: root
+      }
     }
     Text {
       anchors.horizontalCenter: parent.horizontalCenter

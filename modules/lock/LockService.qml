@@ -5,17 +5,21 @@ import Quickshell.Services.Pam
 import Quickshell.Wayland
 import qs.style
 
-// Session lock host. Quickshell creates one WlSessionLockSurface per output:
-// only the DP-2 surface hosts the password view, every other output stays on
-// the dark background. Authentication uses Quickshell's in-process PamContext
-// (same as omarchy) — no scripts, and the password never reaches a subprocess
-// or the log. `lock unlock` is kept as a recovery hatch from a TTY.
+// Session lock host. Quickshell creates one WlSessionLockSurface per output.
+// Every surface gets a focusable field, but only the main output (the first
+// screen with the largest resolution) shows the visuals — the others stay
+// dark. That way typing with the pointer on a side monitor still lands in the
+// shared password state and is rendered on the main screen. Auth uses
+// Quickshell's in-process PamContext — no scripts, no password in a
+// subprocess or the log. `lock unlock` is a recovery hatch from a TTY.
 Item {
   id: root
 
   readonly property string userName: Quickshell.env("USER") || Quickshell.env("LOGNAME")
   property bool pamConfigured: false
   property bool authenticating: false
+  // Single source of truth shared by every surface's field.
+  property string enteredPassword: ""
   property string pendingPassword: ""
   property string failureMessage: ""
   property int failedAttempts: 0
@@ -23,18 +27,30 @@ Item {
   function isLocked(): bool {
     return sessionLock.locked
   }
-  // The password field lives on DP-2 only. If that output is missing, fall
-  // back to the first screen so the session is never left without a way in.
-  function targetScreenName(): string {
+  // Main output = first screen with the largest pixel area. No hardcoded
+  // connector name, so monitor swaps keep working.
+  function mainScreen(): var {
     var ss = Quickshell.screens
-    for (var i = 0; i < ss.length; i++) {
-      if (ss[i].name === "DP-2")
-        return "DP-2"
+    if (ss.length === 0)
+      return null
+    var best = ss[0]
+    var bestArea = best.width * best.height
+    for (var i = 1; i < ss.length; i++) {
+      var area = ss[i].width * ss[i].height
+      if (area > bestArea) {
+        best = ss[i]
+        bestArea = area
+      }
     }
-    return ss.length > 0 ? ss[0].name : ""
+    return best
+  }
+  function isMainScreen(screen): bool {
+    var main = root.mainScreen()
+    return main !== null && screen !== null && main.name === screen.name
   }
   function resetAuth() {
     authenticating = false
+    enteredPassword = ""
     pendingPassword = ""
     failureMessage = ""
     failedAttempts = 0
@@ -99,22 +115,21 @@ Item {
 
       color: Theme.background
 
-      // Only the designated surface instantiates the field, so secondary
-      // outputs cannot steal keyboard focus from it.
-      Loader {
-        active: lockSurface.screen !== null && lockSurface.screen.name === root.targetScreenName()
+      // A field on every surface: whichever output the pointer is over gets
+      // compositor keyboard focus and can accept typing. Only the main
+      // output's instance draws the clock and dots.
+      LockView {
         anchors.fill: parent
+        showVisuals: lockSurface.screen !== null && root.isMainScreen(lockSurface.screen)
+        passwordText: root.enteredPassword
+        failureMessage: root.failureMessage
+        authenticating: root.authenticating
 
-        sourceComponent: Component {
-          LockView {
-            anchors.fill: parent
-            failureMessage: root.failureMessage
-            authenticating: root.authenticating
-
-            onSubmitPassword: function (password) {
-              root.submitPassword(password)
-            }
-          }
+        onPasswordEdited: function (text) {
+          root.enteredPassword = text
+        }
+        onSubmitRequested: function (value) {
+          root.submitPassword(value)
         }
       }
     }
