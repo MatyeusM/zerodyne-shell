@@ -78,9 +78,17 @@ Item {
       WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
       exclusionMode: ExclusionMode.Ignore
 
+      // Guarantees the surface is fully painted at its edges.
+      Rectangle {
+        anchors.fill: parent
+        color: Theme.background
+      }
       // Two soft brand glows. Their centres sit outside the top/bottom edges
       // (at 0.33W/-0.33H and 0.67W/1.33H), so only the fade bleeds in.
       // Declared before the crystal, which keeps it on top.
+      // The gradient paths deliberately run 1px past the surface on the right
+      // and bottom: Qt leaves the closing edge unpainted, which showed up as
+      // a 1px white line against the compositor's background.
       Shape {
         anchors.fill: parent
 
@@ -108,16 +116,16 @@ Item {
             y: 0
           }
           PathLine {
-            x: wallpaperWindow.width
+            x: wallpaperWindow.width + 1
             y: 0
           }
           PathLine {
-            x: wallpaperWindow.width
-            y: wallpaperWindow.height
+            x: wallpaperWindow.width + 1
+            y: wallpaperWindow.height + 1
           }
           PathLine {
             x: 0
-            y: wallpaperWindow.height
+            y: wallpaperWindow.height + 1
           }
           PathLine {
             x: 0
@@ -148,16 +156,16 @@ Item {
             y: 0
           }
           PathLine {
-            x: wallpaperWindow.width
+            x: wallpaperWindow.width + 1
             y: 0
           }
           PathLine {
-            x: wallpaperWindow.width
-            y: wallpaperWindow.height
+            x: wallpaperWindow.width + 1
+            y: wallpaperWindow.height + 1
           }
           PathLine {
             x: 0
-            y: wallpaperWindow.height
+            y: wallpaperWindow.height + 1
           }
           PathLine {
             x: 0
