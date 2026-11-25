@@ -199,6 +199,7 @@ impl Daemon {
         };
         use crate::interaction::power::Handler as PowerHandler;
         use crate::interaction::powerprofile::SetHandler;
+        use crate::interaction::wallpaper::Handler as WallpaperHandler;
         d.interactions
             .must_register(Arc::new(WifiBandHandler::new()));
         d.interactions.must_register(Arc::new(ScanHandler::new()));
@@ -222,6 +223,8 @@ impl Daemon {
             .must_register(Arc::new(OutputSwitchHandler::new()));
         d.interactions.must_register(Arc::new(PowerHandler::new()));
         d.interactions.must_register(Arc::new(SetHandler::new()));
+        d.interactions
+            .must_register(Arc::new(WallpaperHandler::new()));
         d
     }
 

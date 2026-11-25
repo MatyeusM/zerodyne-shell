@@ -7,6 +7,7 @@ pub mod bluetooth;
 pub mod network;
 pub mod power;
 pub mod powerprofile;
+pub mod wallpaper;
 
 use anyhow::{Result, anyhow};
 use serde::Serialize;

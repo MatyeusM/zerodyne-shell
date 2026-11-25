@@ -4,6 +4,7 @@ import "modules/bar"
 import "modules/launcher"
 import "modules/lock"
 import "modules/notifications"
+import "modules/wallpaper"
 
 ShellRoot {
   id: shell
@@ -28,6 +29,9 @@ ShellRoot {
     return ss.length > 0 ? ss[0] : null
   }
 
+  Wallpaper {
+    id: wallpaper
+  }
   // Declared before Bar so the power menu can call into it without a
   // forward reference during hot reload.
   LockService {
