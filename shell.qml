@@ -36,6 +36,8 @@ ShellRoot {
   // forward reference during hot reload.
   LockService {
     id: lock
+
+    wallpaperService: wallpaper
   }
   Bar {
     id: bar

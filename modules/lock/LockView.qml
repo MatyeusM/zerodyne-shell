@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.VectorImage
 import Quickshell
 import qs.components
 import qs.style
@@ -13,6 +14,7 @@ Item {
   property string failureMessage: ""
   property bool authenticating: false
   property bool showVisuals: true
+  property string backgroundUrl: ""
   // Shared with LockService so typing on any output renders on the main one.
   property string passwordText: ""
   readonly property var weekdayNames: ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY",
@@ -78,6 +80,30 @@ Item {
     font.family: Typography.monoName
     font.pixelSize: Typography.sm
     font.weight: Font.Bold
+  }
+  // Dimmed wallpaper behind the clock and field. Declared first so
+  // the text stays on top; only the main output shows it.
+  Item {
+    anchors.fill: parent
+    visible: root.showVisuals && root.backgroundUrl !== ""
+
+    VectorImage {
+      id: backdrop
+
+      // Same footprint as the desktop wallpaper's crystal: a centred square
+      // of one third of the smaller screen dimension.
+      anchors.centerIn: parent
+      width: Math.min(root.width, root.height) / 3
+      height: width
+      source: root.backgroundUrl
+      fillMode: VectorImage.PreserveAspectFit
+      opacity: 0.22
+    }
+    Rectangle {
+      anchors.fill: parent
+      color: Theme.background
+      opacity: 0.55
+    }
   }
   // Tight three-line block: equal measured widths, zero extra spacing, each
   // line vertically centred in its own row. Its centre sits at 1/3 height.

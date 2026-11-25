@@ -15,6 +15,9 @@ import qs.style
 Item {
   id: root
 
+  // Supplied by shell.qml so the main lock surface can reuse the generated
+  // brand wallpaper as a dimmed backdrop.
+  property var wallpaperService: null
   readonly property string userName: Quickshell.env("USER") || Quickshell.env("LOGNAME")
   property bool pamConfigured: false
   property bool authenticating: false
@@ -121,6 +124,7 @@ Item {
       LockView {
         anchors.fill: parent
         showVisuals: lockSurface.screen !== null && root.isMainScreen(lockSurface.screen)
+        backgroundUrl: root.wallpaperService ? root.wallpaperService.sourceUrl : ""
         passwordText: root.enteredPassword
         failureMessage: root.failureMessage
         authenticating: root.authenticating
